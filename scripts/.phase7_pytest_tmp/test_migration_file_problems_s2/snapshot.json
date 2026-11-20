@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "tables": {
+    "pyzzel_test_compare": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "value": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": []
+    }
+  }
+}

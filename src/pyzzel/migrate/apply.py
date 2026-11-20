@@ -18,7 +18,7 @@ class MigrationStatus(NamedTuple):
 
 
 _FILE = re.compile(r"^\d{4}_[a-z][a-z0-9_]*\.sql$")
-_LOCK_ID = 7_894_215_087_123  # Shared session lock for serialized migration runs.
+_LOCK_ID = 7_894_215_087_123  # Shared transaction lock for serialized migration runs.
 _HISTORY_DDL = (
     'CREATE TABLE IF NOT EXISTS {table} ('
     '"id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, '

@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "tables": {
+    "users": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "name": {
+          "type": "character varying(50)",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": []
+    },
+    "orders": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "user_id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "users",
+            "id"
+          ],
+          "on_delete": "CASCADE"
+        },
+        "total": {
+          "type": "numeric(12,2)",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "0",
+          "references": null,
+          "on_delete": null
+        },
+        "status": {
+          "type": "character varying(10)",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "'new'",
+          "references": null,
+          "on_delete": null
+        },
+        "code": {
+          "type": "character varying(20)",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": [
+        "user_id"
+      ]
+    },
+    "coupons": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "code": {
+          "type": "character varying(20)",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": true,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": []
+    }
+  }
+}

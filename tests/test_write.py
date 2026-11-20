@@ -110,6 +110,32 @@ def test_create_many_handles_one_thousand_rows(write_models):
     assert len(set(ids)) == 1000
 
 
+def test_create_many_handles_five_thousand_rows(write_models):
+    Person, _ = write_models
+    ids = Person.create_many(
+        [{"name": f"Bulk {index}", "age": index} for index in range(5000)]
+    )
+    assert len(ids) == 5000
+    assert len(set(ids)) == 5000
+    assert Person.select().count() == 5000
+    assert Person.get(ids[0]).name == "Bulk 0"
+    assert Person.get(ids[-1]).name == "Bulk 4999"
+
+
+def test_create_many_rolls_back_when_later_chunk_fails(write_models):
+    import psycopg
+
+    Person, _ = write_models
+    rows = [
+        {"name": f"Bulk {index}", "email": f"bulk-{index}@example.test"}
+        for index in range(2001)
+    ]
+    rows[-1]["email"] = rows[0]["email"]
+    with pytest.raises(psycopg.errors.UniqueViolation):
+        Person.create_many(rows)
+    assert Person.select().count() == 0
+
+
 def test_update_where_changes_matching_rows_and_invalidates_stale_objects(write_models):
     Person, _ = write_models
     people = [Person.create(name=f"Person {age}", age=age) for age in (10, 20, 30)]

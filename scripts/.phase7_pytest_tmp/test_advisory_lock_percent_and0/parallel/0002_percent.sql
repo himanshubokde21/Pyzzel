@@ -1,0 +1,1 @@
+CREATE TABLE pyzzel_test_percent (v TEXT); INSERT INTO pyzzel_test_percent VALUES ('100%');

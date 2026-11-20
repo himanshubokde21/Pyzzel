@@ -1,0 +1,1 @@
+CREATE TABLE pyzzel_test_a (id INTEGER);

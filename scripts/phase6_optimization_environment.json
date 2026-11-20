@@ -1,0 +1,27 @@
+{
+  "captured_at": "2026-11-18",
+  "machine": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.14 (tags/v3.13.14:fd17997, Jun 10 2026, 13:03:48) [MSC v.1944 64 bit (AMD64)]",
+  "pyzzel": "0.0.1",
+  "psycopg": "3.3.8",
+  "postgresql": "17.11 (Debian 17.11-1.pgdg13+2)",
+  "database": "pyzzle_test",
+  "schema": "public",
+  "backend_pid_baseline": 1223,
+  "pool": {
+    "min": 1,
+    "max": 1,
+    "reused": true
+  },
+  "prepare_threshold": null,
+  "transaction_isolation": "read committed",
+  "synchronous_commit": "on",
+  "database_connectivity": "reachable; database-enabled tests and profiling completed",
+  "measured_chunk_backend_pid": 1226,
+  "phase5_preserved": true,
+  "test_results": {
+    "passed": 263,
+    "skipped": 0,
+    "failed": 0
+  }
+}

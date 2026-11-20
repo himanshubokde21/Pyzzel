@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS pyzzel_test_baseline (id INTEGER PRIMARY KEY);
