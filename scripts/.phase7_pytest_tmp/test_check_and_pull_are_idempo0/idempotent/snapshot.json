@@ -1,0 +1,380 @@
+{
+  "version": 1,
+  "tables": {
+    "pyzzel_test_compare": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "small": {
+          "type": "smallint",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "integer_value": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "0",
+          "references": null,
+          "on_delete": null
+        },
+        "big": {
+          "type": "bigint",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "floating": {
+          "type": "double precision",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "amount": {
+          "type": "numeric(10,2)",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "plain_text": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "bounded_text": {
+          "type": "character varying(50)",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "flag": {
+          "type": "boolean",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "day": {
+          "type": "date",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "clock": {
+          "type": "time without time zone",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "aware": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "naive": {
+          "type": "timestamp without time zone",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "token": {
+          "type": "uuid",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "payload": {
+          "type": "jsonb",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "'{}'::jsonb",
+          "references": null,
+          "on_delete": null
+        },
+        "binary": {
+          "type": "bytea",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "parent_no_action": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare_parent",
+            "id"
+          ],
+          "on_delete": "NO ACTION"
+        },
+        "parent_restrict": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare_parent",
+            "id"
+          ],
+          "on_delete": "RESTRICT"
+        },
+        "parent_cascade": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare_parent",
+            "id"
+          ],
+          "on_delete": "CASCADE"
+        },
+        "parent_set_null": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare_parent",
+            "id"
+          ],
+          "on_delete": "SET NULL"
+        },
+        "self_id": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare",
+            "id"
+          ],
+          "on_delete": "CASCADE"
+        },
+        "unique_value": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": true,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "indexed_value": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "unindexed_fk": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": [
+            "pyzzel_test_compare_parent",
+            "id"
+          ],
+          "on_delete": "NO ACTION"
+        },
+        "nullable_value": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "required_value": {
+          "type": "text",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "default_now": {
+          "type": "timestamp with time zone",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "now()",
+          "references": null,
+          "on_delete": null
+        },
+        "default_true": {
+          "type": "boolean",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "true",
+          "references": null,
+          "on_delete": null
+        },
+        "default_active": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "'active'::text",
+          "references": null,
+          "on_delete": null
+        },
+        "default_negative": {
+          "type": "integer",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "'-1'::integer",
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": [
+        "parent_no_action",
+        "parent_restrict",
+        "parent_cascade",
+        "parent_set_null",
+        "self_id",
+        "indexed_value"
+      ]
+    },
+    "pyzzel_test_compare_parent": {
+      "columns": {
+        "id": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": true,
+          "identity": true,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "name": {
+          "type": "text",
+          "nullable": true,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": null,
+          "references": null,
+          "on_delete": null
+        },
+        "version": {
+          "type": "integer",
+          "nullable": false,
+          "primary_key": false,
+          "identity": false,
+          "unique": false,
+          "default": "1",
+          "references": null,
+          "on_delete": null
+        }
+      },
+      "indexes": []
+    }
+  }
+}

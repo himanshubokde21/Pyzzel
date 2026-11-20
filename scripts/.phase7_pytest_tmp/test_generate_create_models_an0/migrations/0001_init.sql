@@ -1,0 +1,3 @@
+-- pyzzel migration 0001_init
+
+CREATE TABLE IF NOT EXISTS "cli_tiny" ("id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "name" TEXT, "version" INTEGER NOT NULL DEFAULT 1);

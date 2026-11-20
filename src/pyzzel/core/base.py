@@ -9,6 +9,7 @@ from pyzzel.pool import connection
 from pyzzel.sql import create_table as build_create_table, create_index as build_create_index
 from pyzzel.sql import delete as build_delete
 from pyzzel.sql import insert as build_insert
+from pyzzel.sql import insert_many as build_insert_many
 from pyzzel.sql import (
     delete_where as build_delete_where,
     select_by_pk,
@@ -293,23 +294,30 @@ class Base:
                     raise QueryError(f"Unknown column {name!r} for {cls.__name__}")
                 if name == cls._pk_name or name == "version":
                     raise QueryError(f"Column {name!r} cannot be set by create_many()")
-        statement = build_insert(
-            cls.__tablename__, rows[0], returning=[cls._pk_name]
-        )
-        params = [
-            tuple(cls._all_columns[name].to_db(row[name]) for name in keys)
-            for row in rows
-        ]
-
         def run(conn):
-            with conn.cursor() as cur:
-                cur.executemany(statement.sql, params, returning=True)
-                ids = []
-                while True:
-                    ids.append(cur.fetchone()[0])
-                    if not cur.nextset():
-                        break
+            ids = []
+            if not keys:
+                statement = build_insert(
+                    cls.__tablename__, {}, returning=[cls._pk_name]
+                )
+                for _ in rows:
+                    result = conn.execute(statement.sql, statement.params)
+                    ids.append(result.fetchone()[0])
                 return ids
+
+            chunk_size = min(1000, 65535 // len(keys))
+            for offset in range(0, len(rows), chunk_size):
+                chunk = rows[offset : offset + chunk_size]
+                params = [
+                    tuple(cls._all_columns[name].to_db(row[name]) for name in keys)
+                    for row in chunk
+                ]
+                statement = build_insert_many(
+                    cls.__tablename__, keys, params, returning=[cls._pk_name]
+                )
+                result = conn.execute(statement.sql, statement.params)
+                ids.extend(row[0] for row in result.fetchall())
+            return ids
 
         return cls._run_tx(run)
 

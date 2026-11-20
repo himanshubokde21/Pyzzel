@@ -2,7 +2,7 @@ import pytest
 
 from pyzzel import Base, Boolean, Column, Integer, String
 from pyzzel.errors import ModelDefinitionError, QueryError
-from pyzzel.sql import Statement, delete_where, update_where
+from pyzzel.sql import Statement, delete_where, insert_many, update_where
 from pyzzel.sql.conditions import Comparison
 
 
@@ -79,34 +79,19 @@ def test_create_many_validation_and_empty_input(models, monkeypatch):
             User.create_many(rows)
 
 
-def test_create_many_reuses_one_statement_and_preserves_key_order(models, monkeypatch):
+def test_create_many_uses_multirow_insert_and_preserves_key_order(models, monkeypatch):
     User = models
     calls = []
 
-    class Cursor:
-        def __init__(self):
-            self.ids = iter((41, 42))
-            self.remaining = 2
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            return False
-
-        def executemany(self, sql, params, *, returning):
-            calls.append((sql, params, returning))
-
-        def fetchone(self):
-            self.remaining -= 1
-            return (next(self.ids),)
-
-        def nextset(self):
-            return self.remaining > 0
-
     class Connection:
-        def cursor(self):
-            return Cursor()
+        def execute(self, sql, params):
+            calls.append((sql, params))
+
+            class Result:
+                def fetchall(self):
+                    return [(41,), (42,)]
+
+            return Result()
 
     monkeypatch.setattr(User, "_run_tx", classmethod(lambda cls, fn: fn(Connection())))
     assert User.create_many(
@@ -114,11 +99,23 @@ def test_create_many_reuses_one_statement_and_preserves_key_order(models, monkey
     ) == [41, 42]
     assert calls == [
         (
-            'INSERT INTO "write_users" ("name", "age") VALUES (%s, %s) RETURNING "id"',
-            [("A", 10), ("B", 20)],
-            True,
+            'INSERT INTO "write_users" ("name", "age") VALUES (%s, %s), (%s, %s) RETURNING "id"',
+            ("A", 10, "B", 20),
         )
     ]
+
+
+def test_insert_many_builder_parameterizes_values_and_validates_rows():
+    statement = insert_many(
+        "users", ["name", "age"], [("Amit", 20), ("Rahul", 30)], returning=["id"]
+    )
+    assert statement.sql == (
+        'INSERT INTO "users" ("name", "age") VALUES (%s, %s), (%s, %s) '
+        'RETURNING "id"'
+    )
+    assert statement.params == ("Amit", 20, "Rahul", 30)
+    with pytest.raises(ValueError):
+        insert_many("users", ["name"], [("A",), ("B", "extra")])
 
 
 def test_conditional_model_writes_execute_built_statements(models, monkeypatch):

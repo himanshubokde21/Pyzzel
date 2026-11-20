@@ -1,0 +1,1 @@
+-- pyzzel migration 0002_manual

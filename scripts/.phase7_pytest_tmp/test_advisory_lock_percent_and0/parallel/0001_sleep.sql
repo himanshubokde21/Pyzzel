@@ -1,0 +1,1 @@
+SELECT pg_sleep(0.5); CREATE TABLE pyzzel_test_lock (v TEXT);

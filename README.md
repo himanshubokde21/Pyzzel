@@ -143,6 +143,8 @@ finally:
 
 `connect(url, *, min_size=1, max_size=10, timeout=30.0, check=False, prepare_threshold=None)` first probes the database, then opens a `psycopg_pool.ConnectionPool` with autocommit enabled. Automatic prepared statements are disabled by default because transaction poolers such as Supabase's shared pooler do not support them. Set `prepare_threshold` to an integer only when the server connection mode supports prepared statements. The driver imports are lazy: importing `pyzzel` does not import Psycopg.
 
+`create_many()` sends bounded multi-row `INSERT ... RETURNING` statements in one transaction. This avoids Psycopg's pipeline-based `executemany()` path, which shared transaction poolers do not support.
+
 - `min_size` and `max_size` configure the pool.
 - `timeout` is used for connection setup and pool waits.
 - `check=True` checks a pooled connection before each operation. The project measurements show an additional database round trip; leave it off unless checking stale connections is important for your environment.

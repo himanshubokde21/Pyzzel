@@ -1,0 +1,3 @@
+-- pyzzel migration 0001_initial
+
+CREATE TABLE IF NOT EXISTS "pyzzel_test_compare" ("id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "version" INTEGER NOT NULL DEFAULT 1);

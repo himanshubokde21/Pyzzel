@@ -186,32 +186,17 @@ def test_create_many_applies_defaults_on_copies_and_calls_factory_per_row(monkey
         calls.append(value)
         return value
 
-    class Cursor:
-        def __init__(self):
-            self.ids = iter((1, 2))
-            self.remaining = 2
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            return False
-
-        def executemany(self, sql, params, *, returning):
-            self.sql, self.params, self.returning = sql, params, returning
-
-        def fetchone(self):
-            self.remaining -= 1
-            return (next(self.ids),)
-
-        def nextset(self):
-            return self.remaining > 0
-
-    cursor = Cursor()
-
     class Connection:
-        def cursor(self):
-            return cursor
+        def execute(self, sql, params):
+            self.sql, self.params = sql, params
+
+            class Result:
+                def fetchall(self):
+                    return [(1,), (2,)]
+
+            return Result()
+
+    connection = Connection()
 
     class Item(Base):
         __tablename__ = "many_defaults"
@@ -219,12 +204,41 @@ def test_create_many_applies_defaults_on_copies_and_calls_factory_per_row(monkey
         name = Column(String)
         token = Column(String, default=make_token)
 
-    monkeypatch.setattr(Item, "_run_tx", classmethod(lambda cls, fn: fn(Connection())))
+    monkeypatch.setattr(Item, "_run_tx", classmethod(lambda cls, fn: fn(connection)))
     rows = [{"name": "one"}, {"name": "two"}]
     assert Item.create_many(rows) == [1, 2]
     assert rows == [{"name": "one"}, {"name": "two"}]
     assert calls == ["token-0", "token-1"]
-    assert cursor.params == [("one", "token-0"), ("two", "token-1")]
+    assert connection.params == ("one", "token-0", "two", "token-1")
+
+
+def test_create_many_with_only_database_defaults_uses_regular_execute(monkeypatch):
+    class Connection:
+        def __init__(self):
+            self.calls = 0
+
+        def execute(self, sql, params):
+            self.calls += 1
+            assert sql == 'INSERT INTO "default_only" DEFAULT VALUES RETURNING "id"'
+            assert params == ()
+
+            class Result:
+                def fetchone(self):
+                    return (self_id,)
+
+            self_id = self.calls
+            return Result()
+
+    class DefaultOnly(Base):
+        __tablename__ = "default_only"
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+
+    connection = Connection()
+    monkeypatch.setattr(
+        DefaultOnly, "_run_tx", classmethod(lambda cls, fn: fn(connection))
+    )
+    assert DefaultOnly.create_many([{}, {}]) == [1, 2]
 
 
 def test_database_conversions_and_json_conditions():
