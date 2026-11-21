@@ -22,4 +22,3 @@ comparisons/.venv/
 comparisons/.pytest_tmp*/
 comparisons/**/__pycache__/
 tests/
-AGENTS.md
