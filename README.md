@@ -532,7 +532,11 @@ except NotFound:
 
 ## Performance notes
 
-The design notes record measurements from Windows with Dockerized PostgreSQL. Results are workload- and machine-dependent; comparisons are most useful within the same run.
+The project includes a cross-adapter PostgreSQL benchmark for Pyzzel, SQLAlchemy, Drizzle, Psycopg, and Node.js `pg`. The latest Phase 7C runs cover normalized and idiomatic modes, with five rounds and 100 measured samples per adapter for bulk inserts of 100, 1,000, and 5,000 rows. The per-mode reports are in [`comparisons/PHASE7C_NORMALIZED_COMPARISON.md`](comparisons/PHASE7C_NORMALIZED_COMPARISON.md) and [`comparisons/PHASE7C_IDIOMATIC_COMPARISON.md`](comparisons/PHASE7C_IDIOMATIC_COMPARISON.md); raw round archives are preserved under `comparisons/results/`.
+
+These bulk comparisons are descriptive, not an overall adapter ranking. The broader Phase 7C campaign remains incomplete because the database name used by the runs differs from the frozen configuration (`pyzzle_test` versus `pyzzel_test`). See [`comparisons/PHASE7C_STATISTICAL_REPORT.md`](comparisons/PHASE7C_STATISTICAL_REPORT.md) for validation status and limitations. Results are workload- and machine-dependent; use comparisons from the same configuration.
+
+Earlier design measurements recorded:
 
 - Single operations were measured within roughly 3–30% of raw Psycopg across the recorded runs.
 - Query construction measured about 19–46 microseconds per composed query across several later sessions. The notes attribute much of the spread to machine variability; prepared-query caching was not considered necessary.
