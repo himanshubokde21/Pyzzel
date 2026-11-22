@@ -1,5 +1,6 @@
 import subprocess
 import sys
+from pathlib import Path
 
 
 def test_package_import_and_version():
@@ -16,6 +17,14 @@ def test_package_modules_are_importable():
     assert pyzzel.core
     assert pyzzel.sql
     assert pyzzel.pool
+
+
+def test_publish_workflow_skips_existing_distributions():
+    workflow = (
+        Path(__file__).parents[1] / ".github" / "workflows" / "workflow.yml"
+    ).read_text()
+
+    assert "skip-existing: true" in workflow
 
 
 def test_import_does_not_load_psycopg_drivers():
